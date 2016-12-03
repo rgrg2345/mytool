@@ -25,9 +25,10 @@ def padding(s,n=-1):
 
 class Weather:
   def __init__(self,searchtag="臺北市"):
-    self.tag=searchtag
-    self.tData=padding(self.tag,-2)
+    self.tag=searchtag.lower()
+    self.city=self.tag
     self.code=""
+    self.printout=False
 
   def query(self):
     res=requests.get(static_url)
@@ -57,6 +58,9 @@ class Weather:
         tcnt+=1
     return tempData,typeData
   def constructData(self,data,tdata):
+    #init data with city name
+    self.tData=padding(self.city,4)
+
     week=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
     wod=datetime.datetime.now().weekday()
     cnt=0
@@ -74,13 +78,13 @@ class Weather:
         self.tData+=padding(tdata[i][j],-2)
       self.tData+=str('\n')
   def setcity(self,city):
-    self.tag=city
+    self.city=self.tag=city
     self.tData=""
     self.tData=padding(self.tag,-2)
   def cityweather(self):
     if self.code=="":
-      code=self.query()
-    parser=code.select('tr')
+      self.code=self.query()
+    parser=self.code.select('tr')
     data,i,s=[],0,""
     while i<len(parser)-1:
       m=re.search('星期一',str(parser[i]))
@@ -90,14 +94,27 @@ class Weather:
         i=i+2
       else:
         i=i+1
+
+    #initial list
+    citys=[""]
+
     for item in data:
-      city=re.search('%s'%self.tag,item)
-      if city:
+      if self.tag=="all":
+        citys[0]=BeautifulSoup(item,"html.parser").select('th')[0].text
+        self.city=citys[0]
+      else:
+        citys=re.findall('%s'%self.tag,item)
+      for city in citys:
+        city=BeautifulSoup(item,"html.parser").select('th')[0].text
+        self.city=city
+
         data,tdata=self.extractData(item)
         self.constructData(data,tdata)
         print self.tData
-        return
-    print 'Cannot\' find %s\'s weather data'%self.tag
+        self.printout=True
+
+    if not self.printout:
+      print 'Cannot\' find %s\'s weather data'%self.tag
 if len(sys.argv)<2:
   w=Weather()
 else:
