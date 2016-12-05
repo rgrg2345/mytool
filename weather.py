@@ -17,9 +17,7 @@ def padding(s,n=-1):
     cnt=padlen-n
   else:
     cnt=len(s)
-  while cnt<=padlen:
-    s+=" "
-    cnt+=1
+  s+=" "*int(padlen-cnt)
 
   return s
 
