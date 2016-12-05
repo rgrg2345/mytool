@@ -81,6 +81,8 @@ class Weather:
     self.city=self.tag=city
     self.tData=""
     self.tData=padding(self.tag,-2)
+    self.printout=False
+
   def cityweather(self):
     if self.code=="":
       self.code=self.query()
