@@ -6,6 +6,8 @@ from sys import argv
 def main(arg):
   for item in arg[1:]:
     l=item.split(',')
+    if l[-1]=='':
+      l=l[:-1]
     print "Random select from %s"%item
     print "Result : %s"%(l[randrange(len(l))])
 

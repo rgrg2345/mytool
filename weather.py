@@ -1,6 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
+
 import re,requests
+
 import sys,datetime
 
 
@@ -10,16 +13,16 @@ sys.setdefaultencoding('utf8')
 #because it is fixed, so const it
 static_url='http://www.cwb.gov.tw/V7/forecast/week/week.htm'
 def padding(s,n=-1):
-  padlen=10
-  if n==-2:
-    cnt=round(len(s)/1.5)
-  elif n!=-1:
-    cnt=padlen-n
-  else:
-    cnt=len(s)
-  s+=" "*int(padlen-cnt)
+    padlen=10
+    if n==-2:
+      cnt=round(len(s)/1.5)
+    elif n!=-1:
+      cnt=padlen-n
+    else:
+      cnt=len(s)
+    s+=" "*int(padlen-cnt)
 
-  return s
+    return s
 
 class Weather:
   def __init__(self,searchtag="臺北市"):
@@ -115,6 +118,7 @@ class Weather:
 
     if not self.printout:
       print 'Cannot\' find %s\'s weather data'%self.tag
+
 if len(sys.argv)<2:
   w=Weather()
 else:
@@ -126,5 +130,10 @@ if len(sys.argv)>2:
     w.setcity(sys.argv[2+cnt])
     w.cityweather()
     cnt+=1
+
+
+
+
+
 
 
