@@ -15,5 +15,5 @@ bofstr=cyclic(searchlen)
 dst=h2ord(argv[1])
 for i in range(searchlen-len(dst)):
     if dst==bofstr[i:i+4]:
-        print argv[1],"found at offset:",i+3
+        print argv[1],"found at offset:",i+3 if i>0 else 0
         break
